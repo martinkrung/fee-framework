@@ -317,8 +317,11 @@
                     <input type="number" id="tradingVolume" value="19243.69" step="0.01" readonly style="background: #e9ecef; cursor: not-allowed;">
                 </div>
                 <div class="form-group">
-                    <label for="totalTradingFeeRate">Total Trading Fee per Day (rate)</label>
-                    <input type="number" id="totalTradingFeeRate" value="0.005" step="0.001">
+                    <label for="totalTradingFeeRate">Trading Fee (bips)</label>
+                    <input type="number" id="totalTradingFeeRate" value="50" step="1" min="0">
+                    <div style="font-size: 0.85em; color: #6c757d; margin-top: 5px;">
+                        = <span id="feePercentageDisplay">0.50%</span>
+                    </div>
                 </div>
             </div>
 
@@ -371,6 +374,13 @@
             document.getElementById('tradingVolume').value = tradingVolume.toFixed(2);
         }
 
+        // Update fee percentage display from bips
+        function updateFeePercentage() {
+            const bips = parseFloat(document.getElementById('totalTradingFeeRate').value) || 0;
+            const percentage = (bips / 100).toFixed(2);
+            document.getElementById('feePercentageDisplay').textContent = `${percentage}%`;
+        }
+
         // Calculate control percentage automatically
         function updateControlPercentage() {
             const daoFeeSplit = parseFloat(document.getElementById('daoFeeSplit').value) || 0;
@@ -396,11 +406,14 @@
             document.getElementById('usdValue').addEventListener('input', updateTradingVolume);
             document.getElementById('avgLiquidity').addEventListener('input', updateTradingVolume);
 
+            document.getElementById('totalTradingFeeRate').addEventListener('input', updateFeePercentage);
+
             document.getElementById('daoFeeSplit').addEventListener('input', updateControlPercentage);
             document.getElementById('toLPSplit').addEventListener('input', updateControlPercentage);
             document.getElementById('toAssetIssuersSplit').addEventListener('input', updateControlPercentage);
 
-            // Initialize control percentage on load
+            // Initialize displays on load
+            updateFeePercentage();
             updateControlPercentage();
         });
 
@@ -411,7 +424,8 @@
             const usdValue = parseFloat(document.getElementById('usdValue').value) || 0;
             const avgLiquidity = parseFloat(document.getElementById('avgLiquidity').value) || 0;
             const tradingVolume = parseFloat(document.getElementById('tradingVolume').value) || 0;
-            const totalTradingFeeRate = parseFloat(document.getElementById('totalTradingFeeRate').value) || 0;
+            const totalTradingFeeBips = parseFloat(document.getElementById('totalTradingFeeRate').value) || 0;
+            const totalTradingFeeRate = totalTradingFeeBips / 10000; // Convert bips to decimal
             const daoFeeSplit = parseFloat(document.getElementById('daoFeeSplit').value) || 0;
             const toLPSplit = parseFloat(document.getElementById('toLPSplit').value) || 0;
             const toAssetIssuersSplit = parseFloat(document.getElementById('toAssetIssuersSplit').value) || 0;
@@ -442,6 +456,7 @@
                     usdValue,
                     avgLiquidity,
                     tradingVolume,
+                    totalTradingFeeBips,
                     totalTradingFeeRate,
                     daoFeeSplit,
                     toLPSplit,
@@ -478,7 +493,7 @@
             console.log(`  USD Value: $${formatNumber(usdValue)}`);
             console.log(`  AVG Liquidity Utilisation: ${avgLiquidity}`);
             console.log(`  Trading Volume: $${formatNumber(tradingVolume)}`);
-            console.log(`  Total Trading Fee Rate: ${totalTradingFeeRate} (${(totalTradingFeeRate * 100).toFixed(2)}%)`);
+            console.log(`  Trading Fee: ${totalTradingFeeBips} bips (${(totalTradingFeeRate * 100).toFixed(2)}%)`);
             console.log(`  DAO Fee Split: ${daoFeeSplit}`);
             console.log(`  To LP Split: ${toLPSplit}`);
             if (toAssetIssuersSplit > 0) {
@@ -566,7 +581,7 @@
                     <div class="console-line">  <span class="console-key">Value of the Pool:</span> <span class="console-value">$${formatNumber(result.inputs.usdValue)}</span></div>
                     <div class="console-line">  <span class="console-key">Average Daily Liquidity Utilisation:</span> <span class="console-value">${result.inputs.avgLiquidity}</span></div>
                     <div class="console-line">  <span class="console-key">Trading Volume:</span> <span class="console-value">$${formatNumber(result.inputs.tradingVolume)}</span></div>
-                    <div class="console-line">  <span class="console-key">Total Trading Fee per Day Rate:</span> <span class="console-value">${result.inputs.totalTradingFeeRate}</span> <span style="color: #b5cea8;">(${(result.inputs.totalTradingFeeRate * 100).toFixed(2)}%)</span></div>
+                    <div class="console-line">  <span class="console-key">Trading Fee:</span> <span class="console-value">${result.inputs.totalTradingFeeBips} bips</span> <span style="color: #b5cea8;">(${(result.inputs.totalTradingFeeRate * 100).toFixed(2)}%)</span></div>
                     <div class="console-line">  <span class="console-key">Curve Dao Fee Split:</span> <span class="console-value">${result.inputs.daoFeeSplit}</span></div>
                     <div class="console-line">  <span class="console-key">Liquidity Provider Fee Split:</span> <span class="console-value">${result.inputs.toLPSplit}</span></div>
                     ${showAssetIssuers ? `<div class="console-line">  <span class="console-key">To Asset Issuers Split:</span> <span class="console-value">${result.inputs.toAssetIssuersSplit}</span></div>` : ''}
@@ -609,7 +624,7 @@
                             <td>$${formatNumber(result.inputs.usdValue)}</td>
                             <td>${result.inputs.avgLiquidity}</td>
                             <td>$${formatNumber(result.inputs.tradingVolume)}</td>
-                            <td>${result.inputs.totalTradingFeeRate}</td>
+                            <td>${result.inputs.totalTradingFeeBips} bips</td>
                             <td>${result.inputs.daoFeeSplit}</td>
                             <td>${result.inputs.toLPSplit}</td>
                             ${showAssetIssuers ? `<td>${result.inputs.toAssetIssuersSplit}</td>` : ''}
@@ -702,7 +717,8 @@
                 'Value of Pool ($)',
                 'Avg Daily Liq Util',
                 'Trading Volume ($)',
-                'Total Fee Rate',
+                'Trading Fee (bips)',
+                'Trading Fee (%)',
                 'DAO Fee Split',
                 'LP Fee Split',
                 'Asset Issuers Split',
@@ -731,7 +747,8 @@
                     calc.inputs.usdValue,
                     calc.inputs.avgLiquidity,
                     calc.inputs.tradingVolume,
-                    calc.inputs.totalTradingFeeRate,
+                    calc.inputs.totalTradingFeeBips,
+                    (calc.inputs.totalTradingFeeRate * 100).toFixed(2),
                     calc.inputs.daoFeeSplit,
                     calc.inputs.toLPSplit,
                     calc.inputs.toAssetIssuersSplit,
