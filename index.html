@@ -127,6 +127,18 @@
             background: #5a6268;
         }
 
+        .btn-download {
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-download:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
         .results-section {
             margin-top: 30px;
         }
@@ -333,6 +345,7 @@
             <div class="button-group">
                 <button class="btn-calculate" onclick="calculateFees()">Calculate Fees</button>
                 <button class="btn-clear" onclick="clearResults()">Clear History</button>
+                <button class="btn-download" onclick="downloadCSV()">Download CSV</button>
             </div>
         </div>
 
@@ -348,6 +361,7 @@
 
     <script>
         let calculationCount = 0;
+        let allCalculations = []; // Store all calculations for CSV export
 
         // Calculate trading volume automatically
         function updateTradingVolume() {
@@ -497,6 +511,9 @@
             }
             console.log('='.repeat(80));
             console.log('');
+
+            // Store calculation for CSV export
+            allCalculations.push(result);
 
             // Display result in UI
             displayResult(result, calculationCount);
@@ -668,8 +685,90 @@
                 </div>
             `;
             calculationCount = 0;
+            allCalculations = []; // Clear stored calculations
             console.clear();
             console.log('Calculator history cleared.');
+        }
+
+        function downloadCSV() {
+            if (allCalculations.length === 0) {
+                alert('No calculations to export. Please calculate some fees first!');
+                return;
+            }
+
+            // CSV Headers
+            const headers = [
+                'Timestamp',
+                'Value of Pool ($)',
+                'Avg Daily Liq Util',
+                'Trading Volume ($)',
+                'Total Fee Rate',
+                'DAO Fee Split',
+                'LP Fee Split',
+                'Asset Issuers Split',
+                'Control (%)',
+                'Daily Total Fee ($)',
+                'Daily DAO Fee ($)',
+                'Daily LP Fee ($)',
+                'Daily Asset Issuers ($)',
+                'Yearly Total Fee ($)',
+                'Yearly DAO Fee ($)',
+                'Yearly LP Fee ($)',
+                'Yearly Asset Issuers ($)',
+                'Total APY (%)',
+                'DAO APY (%)',
+                'LP APY (%)',
+                'Asset Issuers APY (%)'
+            ];
+
+            // Build CSV content
+            let csvContent = headers.join(',') + '\n';
+
+            // Add each calculation as a row
+            allCalculations.forEach(calc => {
+                const row = [
+                    `"${calc.timestamp}"`,
+                    calc.inputs.usdValue,
+                    calc.inputs.avgLiquidity,
+                    calc.inputs.tradingVolume,
+                    calc.inputs.totalTradingFeeRate,
+                    calc.inputs.daoFeeSplit,
+                    calc.inputs.toLPSplit,
+                    calc.inputs.toAssetIssuersSplit,
+                    calc.inputs.control,
+                    calc.calculations.daily.totalTradingFeeAmount,
+                    calc.calculations.daily.daoFeeAmount,
+                    calc.calculations.daily.toLPAmount,
+                    calc.calculations.daily.toAssetIssuersAmount,
+                    calc.calculations.yearly.yearlyTotalTradingFee,
+                    calc.calculations.yearly.yearlyDaoFee,
+                    calc.calculations.yearly.yearlyToLP,
+                    calc.calculations.yearly.yearlyToAssetIssuers,
+                    calc.calculations.apy.apyTotalTradingFee.toFixed(2),
+                    calc.calculations.apy.apyDaoFee.toFixed(2),
+                    calc.calculations.apy.apyToLP.toFixed(2),
+                    calc.calculations.apy.apyToAssetIssuers.toFixed(2)
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            // Generate filename with timestamp
+            const now = new Date();
+            const filename = `amm-fee-calculations-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}.csv`;
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            console.log(`CSV exported: ${allCalculations.length} calculations saved to ${filename}`);
         }
 
         // Initial calculation on page load
