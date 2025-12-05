@@ -221,13 +221,12 @@
         .console-log {
             background: #1e1e1e;
             color: #d4d4d4;
-            padding: 15px;
+            padding: 20px;
             border-radius: 6px;
             font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            margin-top: 10px;
-            max-height: 200px;
-            overflow-y: auto;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            overflow-x: auto;
         }
 
         .console-line {
@@ -430,6 +429,37 @@
                 <div class="result-header">
                     <div class="result-title">Calculation #${count}</div>
                     <div class="result-timestamp">${result.timestamp}</div>
+                </div>
+
+                <div class="console-log">
+                    <div class="console-line"><span style="color: #4ec9b0;">================================================================================</span></div>
+                    <div class="console-line"><span style="color: #dcdcaa;">CALCULATION #${count}</span> - <span style="color: #ce9178;">${result.timestamp}</span></div>
+                    <div class="console-line"><span style="color: #4ec9b0;">================================================================================</span></div>
+                    <div class="console-line"><span style="color: #569cd6; font-weight: bold;">INPUTS:</span></div>
+                    <div class="console-line">  <span class="console-key">USD Value:</span> <span class="console-value">$${formatNumber(result.inputs.usdValue)}</span></div>
+                    <div class="console-line">  <span class="console-key">AVG Liquidity Utilisation:</span> <span class="console-value">${result.inputs.avgLiquidity}</span></div>
+                    <div class="console-line">  <span class="console-key">Trading Volume:</span> <span class="console-value">$${formatNumber(result.inputs.tradingVolume)}</span></div>
+                    <div class="console-line">  <span class="console-key">Total Trading Fee Rate:</span> <span class="console-value">${result.inputs.totalTradingFeeRate}</span> <span style="color: #b5cea8;">(${(result.inputs.totalTradingFeeRate * 100).toFixed(2)}%)</span></div>
+                    <div class="console-line">  <span class="console-key">DAO Fee Split:</span> <span class="console-value">${result.inputs.daoFeeSplit}</span></div>
+                    <div class="console-line">  <span class="console-key">To LP Split:</span> <span class="console-value">${result.inputs.toLPSplit}</span></div>
+                    <div class="console-line">  <span class="console-key">To Asset Issuers Split:</span> <span class="console-value">${result.inputs.toAssetIssuersSplit}</span></div>
+                    <div class="console-line">  <span class="console-key">Control:</span> <span class="console-value">${result.inputs.control}%</span></div>
+                    <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">DAILY CALCULATIONS:</span></div>
+                    <div class="console-line">  <span class="console-key">Total Trading Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.totalTradingFeeAmount)}</span></div>
+                    <div class="console-line">  <span class="console-key">DAO Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.daoFeeAmount)}</span></div>
+                    <div class="console-line">  <span class="console-key">To LP:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.toLPAmount)}</span></div>
+                    <div class="console-line">  <span class="console-key">To Asset Issuers:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.toAssetIssuersAmount)}</span></div>
+                    <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">YEARLY PROJECTIONS:</span></div>
+                    <div class="console-line">  <span class="console-key">Total Trading Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyTotalTradingFee)}</span></div>
+                    <div class="console-line">  <span class="console-key">DAO Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyDaoFee)}</span></div>
+                    <div class="console-line">  <span class="console-key">To LP:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyToLP)}</span></div>
+                    <div class="console-line">  <span class="console-key">To Asset Issuers:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyToAssetIssuers)}</span></div>
+                    <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">APY:</span></div>
+                    <div class="console-line">  <span class="console-key">Total Trading Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyTotalTradingFee.toFixed(2)}%</span></div>
+                    <div class="console-line">  <span class="console-key">DAO Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyDaoFee.toFixed(2)}%</span></div>
+                    <div class="console-line">  <span class="console-key">To LP APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyToLP.toFixed(2)}%</span></div>
+                    <div class="console-line">  <span class="console-key">To Asset Issuers APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyToAssetIssuers.toFixed(2)}%</span></div>
+                    <div class="console-line"><span style="color: #4ec9b0;">================================================================================</span></div>
                 </div>
 
                 <table class="result-table">
