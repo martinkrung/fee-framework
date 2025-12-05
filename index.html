@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0a1929 0%, #1a2332 50%, #0d1b2a 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -28,23 +28,28 @@
         }
 
         h1 {
-            color: #333;
+            color: #00d4ff;
             margin-bottom: 10px;
             font-size: 2em;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
         }
 
         .subtitle {
-            color: #666;
+            color: #8ab4f8;
             margin-bottom: 30px;
             font-size: 0.95em;
         }
 
+        h2, h3 {
+            color: #00d4ff;
+        }
+
         .form-section {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.05);
             padding: 25px;
             border-radius: 8px;
             margin-bottom: 30px;
-            border: 2px solid #e9ecef;
+            border: 2px solid rgba(0, 153, 255, 0.3);
         }
 
         .form-grid {
@@ -62,22 +67,25 @@
         label {
             font-weight: 600;
             margin-bottom: 8px;
-            color: #495057;
+            color: #00d4ff;
             font-size: 0.9em;
         }
 
         input {
             padding: 10px 12px;
-            border: 2px solid #dee2e6;
+            border: 2px solid rgba(0, 153, 255, 0.3);
             border-radius: 6px;
             font-size: 1em;
             transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
         }
 
         input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #0099ff;
+            box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .button-group {
@@ -99,23 +107,26 @@
         }
 
         .btn-calculate {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%);
             color: white;
             flex: 1;
         }
 
         .btn-calculate:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 20px rgba(0, 153, 255, 0.5);
+            background: linear-gradient(135deg, #00b3ff 0%, #00e6ff 100%);
         }
 
         .btn-clear {
-            background: #6c757d;
-            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            color: #00d4ff;
+            border: 2px solid rgba(0, 153, 255, 0.3);
         }
 
         .btn-clear:hover {
-            background: #5a6268;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #0099ff;
         }
 
         .results-section {
@@ -128,8 +139,8 @@
         }
 
         .calculation-result {
-            background: white;
-            border: 2px solid #e9ecef;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(0, 153, 255, 0.2);
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
@@ -153,18 +164,49 @@
             align-items: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #e9ecef;
+            border-bottom: 2px solid rgba(0, 153, 255, 0.2);
+            cursor: pointer;
+        }
+
+        .result-header:hover {
+            border-bottom-color: rgba(0, 153, 255, 0.4);
         }
 
         .result-title {
             font-weight: 600;
-            color: #667eea;
+            color: #00d4ff;
             font-size: 1.1em;
         }
 
         .result-timestamp {
-            color: #6c757d;
+            color: #8ab4f8;
             font-size: 0.85em;
+        }
+
+        .collapse-indicator {
+            color: #0099ff;
+            font-size: 1.2em;
+            margin-left: 10px;
+            transition: transform 0.3s;
+        }
+
+        .collapse-indicator.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .result-summary {
+            color: #8ab4f8;
+            font-size: 0.95em;
+            margin-top: 10px;
+        }
+
+        .result-details {
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .result-details.collapsed {
+            max-height: 0;
         }
 
         .result-table {
@@ -177,45 +219,46 @@
         .result-table td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid rgba(0, 153, 255, 0.1);
+            color: #ffffff;
         }
 
         .result-table th {
-            background: #f8f9fa;
+            background: rgba(0, 153, 255, 0.15);
             font-weight: 600;
-            color: #495057;
+            color: #00d4ff;
             font-size: 0.9em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .result-table tr:hover {
-            background: #f8f9fa;
+            background: rgba(0, 153, 255, 0.05);
         }
 
         .yearly-row {
-            background: #e7f3ff !important;
+            background: rgba(0, 153, 255, 0.15) !important;
             font-weight: 600;
         }
 
         .apy-row {
-            background: #fff3cd !important;
+            background: rgba(0, 212, 255, 0.15) !important;
             font-weight: 600;
         }
 
         .value-positive {
-            color: #28a745;
+            color: #00ff88;
         }
 
         .value-highlight {
             font-weight: 600;
-            color: #667eea;
+            color: #00d4ff;
         }
 
         .no-results {
             text-align: center;
             padding: 40px;
-            color: #6c757d;
+            color: #8ab4f8;
         }
 
         .console-log {
@@ -252,11 +295,11 @@
             <h2 style="margin-bottom: 20px; color: #333;">Input Parameters</h2>
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="usdValue">USD Value ($)</label>
+                    <label for="usdValue">Value of the Pool ($)</label>
                     <input type="number" id="usdValue" value="962184.62" step="0.01">
                 </div>
                 <div class="form-group">
-                    <label for="avgLiquidity">AVG Liquidity Utilisation</label>
+                    <label for="avgLiquidity">Average Daily Liquidity Utilisation</label>
                     <input type="number" id="avgLiquidity" value="0.02" step="0.01">
                 </div>
                 <div class="form-group">
@@ -264,7 +307,7 @@
                     <input type="number" id="tradingVolume" value="19243.69" step="0.01">
                 </div>
                 <div class="form-group">
-                    <label for="totalTradingFeeRate">Total Trading Fee (rate)</label>
+                    <label for="totalTradingFeeRate">Total Trading Fee per Day (rate)</label>
                     <input type="number" id="totalTradingFeeRate" value="0.005" step="0.001">
                 </div>
             </div>
@@ -272,11 +315,11 @@
             <h3 style="margin: 20px 0 15px 0; color: #495057;">Fee Distribution Splits</h3>
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="daoFeeSplit">DAO FEE (split ratio)</label>
+                    <label for="daoFeeSplit">Curve Dao Fee (split ratio)</label>
                     <input type="number" id="daoFeeSplit" value="0.5" step="0.01" min="0" max="1">
                 </div>
                 <div class="form-group">
-                    <label for="toLPSplit">To LP (split ratio)</label>
+                    <label for="toLPSplit">Liquidity Provider Fee (split ratio)</label>
                     <input type="number" id="toLPSplit" value="0.5" step="0.01" min="0" max="1">
                 </div>
                 <div class="form-group">
@@ -284,7 +327,7 @@
                     <input type="number" id="toAssetIssuersSplit" value="0" step="0.01" min="0" max="1">
                 </div>
                 <div class="form-group">
-                    <label for="control">Control (%)</label>
+                    <label for="control">Control calculation (Needs to be 100%)</label>
                     <input type="number" id="control" value="100" step="0.01">
                 </div>
             </div>
@@ -426,38 +469,49 @@
             const r = result.calculations;
 
             resultDiv.innerHTML = `
-                <div class="result-header">
-                    <div class="result-title">Calculation #${count}</div>
+                <div class="result-header" onclick="toggleDetails(this)">
+                    <div style="display: flex; align-items: center;">
+                        <div class="result-title">Calculation #${count}</div>
+                        <span class="collapse-indicator">▼</span>
+                    </div>
                     <div class="result-timestamp">${result.timestamp}</div>
                 </div>
 
-                <div class="console-log">
+                <div class="result-summary">
+                    <strong>Yearly Total:</strong> $${formatNumber(r.yearly.yearlyTotalTradingFee)} |
+                    <strong>APY:</strong> ${r.apy.apyTotalTradingFee.toFixed(2)}% |
+                    <strong>Curve DAO:</strong> $${formatNumber(r.yearly.yearlyDaoFee)} (${r.apy.apyDaoFee.toFixed(2)}%) |
+                    <strong>LP:</strong> $${formatNumber(r.yearly.yearlyToLP)} (${r.apy.apyToLP.toFixed(2)}%)
+                </div>
+
+                <div class="result-details collapsed">
+                    <div class="console-log">
                     <div class="console-line"><span style="color: #4ec9b0;">================================================================================</span></div>
                     <div class="console-line"><span style="color: #dcdcaa;">CALCULATION #${count}</span> - <span style="color: #ce9178;">${result.timestamp}</span></div>
                     <div class="console-line"><span style="color: #4ec9b0;">================================================================================</span></div>
                     <div class="console-line"><span style="color: #569cd6; font-weight: bold;">INPUTS:</span></div>
-                    <div class="console-line">  <span class="console-key">USD Value:</span> <span class="console-value">$${formatNumber(result.inputs.usdValue)}</span></div>
-                    <div class="console-line">  <span class="console-key">AVG Liquidity Utilisation:</span> <span class="console-value">${result.inputs.avgLiquidity}</span></div>
+                    <div class="console-line">  <span class="console-key">Value of the Pool:</span> <span class="console-value">$${formatNumber(result.inputs.usdValue)}</span></div>
+                    <div class="console-line">  <span class="console-key">Average Daily Liquidity Utilisation:</span> <span class="console-value">${result.inputs.avgLiquidity}</span></div>
                     <div class="console-line">  <span class="console-key">Trading Volume:</span> <span class="console-value">$${formatNumber(result.inputs.tradingVolume)}</span></div>
-                    <div class="console-line">  <span class="console-key">Total Trading Fee Rate:</span> <span class="console-value">${result.inputs.totalTradingFeeRate}</span> <span style="color: #b5cea8;">(${(result.inputs.totalTradingFeeRate * 100).toFixed(2)}%)</span></div>
-                    <div class="console-line">  <span class="console-key">DAO Fee Split:</span> <span class="console-value">${result.inputs.daoFeeSplit}</span></div>
-                    <div class="console-line">  <span class="console-key">To LP Split:</span> <span class="console-value">${result.inputs.toLPSplit}</span></div>
+                    <div class="console-line">  <span class="console-key">Total Trading Fee per Day Rate:</span> <span class="console-value">${result.inputs.totalTradingFeeRate}</span> <span style="color: #b5cea8;">(${(result.inputs.totalTradingFeeRate * 100).toFixed(2)}%)</span></div>
+                    <div class="console-line">  <span class="console-key">Curve Dao Fee Split:</span> <span class="console-value">${result.inputs.daoFeeSplit}</span></div>
+                    <div class="console-line">  <span class="console-key">Liquidity Provider Fee Split:</span> <span class="console-value">${result.inputs.toLPSplit}</span></div>
                     <div class="console-line">  <span class="console-key">To Asset Issuers Split:</span> <span class="console-value">${result.inputs.toAssetIssuersSplit}</span></div>
                     <div class="console-line">  <span class="console-key">Control:</span> <span class="console-value">${result.inputs.control}%</span></div>
                     <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">DAILY CALCULATIONS:</span></div>
                     <div class="console-line">  <span class="console-key">Total Trading Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.totalTradingFeeAmount)}</span></div>
-                    <div class="console-line">  <span class="console-key">DAO Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.daoFeeAmount)}</span></div>
-                    <div class="console-line">  <span class="console-key">To LP:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.toLPAmount)}</span></div>
+                    <div class="console-line">  <span class="console-key">Curve Dao Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.daoFeeAmount)}</span></div>
+                    <div class="console-line">  <span class="console-key">Liquidity Provider Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.toLPAmount)}</span></div>
                     <div class="console-line">  <span class="console-key">To Asset Issuers:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.toAssetIssuersAmount)}</span></div>
                     <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">YEARLY PROJECTIONS:</span></div>
                     <div class="console-line">  <span class="console-key">Total Trading Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyTotalTradingFee)}</span></div>
-                    <div class="console-line">  <span class="console-key">DAO Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyDaoFee)}</span></div>
-                    <div class="console-line">  <span class="console-key">To LP:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyToLP)}</span></div>
+                    <div class="console-line">  <span class="console-key">Curve Dao Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyDaoFee)}</span></div>
+                    <div class="console-line">  <span class="console-key">Liquidity Provider Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyToLP)}</span></div>
                     <div class="console-line">  <span class="console-key">To Asset Issuers:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyToAssetIssuers)}</span></div>
                     <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">APY:</span></div>
                     <div class="console-line">  <span class="console-key">Total Trading Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyTotalTradingFee.toFixed(2)}%</span></div>
-                    <div class="console-line">  <span class="console-key">DAO Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyDaoFee.toFixed(2)}%</span></div>
-                    <div class="console-line">  <span class="console-key">To LP APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyToLP.toFixed(2)}%</span></div>
+                    <div class="console-line">  <span class="console-key">Curve Dao Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyDaoFee.toFixed(2)}%</span></div>
+                    <div class="console-line">  <span class="console-key">Liquidity Provider Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyToLP.toFixed(2)}%</span></div>
                     <div class="console-line">  <span class="console-key">To Asset Issuers APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyToAssetIssuers.toFixed(2)}%</span></div>
                     <div class="console-line"><span style="color: #4ec9b0;">================================================================================</span></div>
                 </div>
@@ -466,13 +520,13 @@
                     <thead>
                         <tr>
                             <th>WETH/INV</th>
-                            <th>USD Value</th>
-                            <th>AVG Liquidity Utilisation</th>
+                            <th>Value of Pool</th>
+                            <th>Avg Daily Liq. Util.</th>
                             <th>Trading Volume</th>
                             <th>Total Trading Fee</th>
-                            <th>DAO FEE</th>
-                            <th>To LP</th>
-                            <th>To Asset Issuers</th>
+                            <th>Curve Dao Fee</th>
+                            <th>LP Fee</th>
+                            <th>Asset Issuers</th>
                             <th>Control</th>
                         </tr>
                     </thead>
@@ -523,10 +577,27 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             `;
 
             // Insert at the top (newest first)
             resultsLog.insertBefore(resultDiv, resultsLog.firstChild);
+        }
+
+        function toggleDetails(headerElement) {
+            const resultDiv = headerElement.closest('.calculation-result');
+            const detailsDiv = resultDiv.querySelector('.result-details');
+            const indicator = resultDiv.querySelector('.collapse-indicator');
+
+            if (detailsDiv.classList.contains('collapsed')) {
+                detailsDiv.classList.remove('collapsed');
+                detailsDiv.style.maxHeight = detailsDiv.scrollHeight + 'px';
+                indicator.classList.remove('collapsed');
+            } else {
+                detailsDiv.classList.add('collapsed');
+                detailsDiv.style.maxHeight = '0';
+                indicator.classList.add('collapsed');
+            }
         }
 
         function formatNumber(num) {
