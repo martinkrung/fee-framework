@@ -440,26 +440,34 @@
             console.log(`  Total Trading Fee Rate: ${totalTradingFeeRate} (${(totalTradingFeeRate * 100).toFixed(2)}%)`);
             console.log(`  DAO Fee Split: ${daoFeeSplit}`);
             console.log(`  To LP Split: ${toLPSplit}`);
-            console.log(`  To Asset Issuers Split: ${toAssetIssuersSplit}`);
+            if (toAssetIssuersSplit > 0) {
+                console.log(`  To Asset Issuers Split: ${toAssetIssuersSplit}`);
+            }
             console.log(`  Control: ${control}%`);
             console.log('');
             console.log('DAILY CALCULATIONS:');
             console.log(`  Total Trading Fee: $${formatNumber(totalTradingFeeAmount)}`);
             console.log(`  DAO Fee: $${formatNumber(daoFeeAmount)}`);
             console.log(`  To LP: $${formatNumber(toLPAmount)}`);
-            console.log(`  To Asset Issuers: $${formatNumber(toAssetIssuersAmount)}`);
+            if (toAssetIssuersSplit > 0) {
+                console.log(`  To Asset Issuers: $${formatNumber(toAssetIssuersAmount)}`);
+            }
             console.log('');
             console.log('YEARLY PROJECTIONS:');
             console.log(`  Total Trading Fee: $${formatNumber(yearlyTotalTradingFee)}`);
             console.log(`  DAO Fee: $${formatNumber(yearlyDaoFee)}`);
             console.log(`  To LP: $${formatNumber(yearlyToLP)}`);
-            console.log(`  To Asset Issuers: $${formatNumber(yearlyToAssetIssuers)}`);
+            if (toAssetIssuersSplit > 0) {
+                console.log(`  To Asset Issuers: $${formatNumber(yearlyToAssetIssuers)}`);
+            }
             console.log('');
             console.log('APY:');
             console.log(`  Total Trading Fee APY: ${apyTotalTradingFee.toFixed(2)}%`);
             console.log(`  DAO Fee APY: ${apyDaoFee.toFixed(2)}%`);
             console.log(`  To LP APY: ${apyToLP.toFixed(2)}%`);
-            console.log(`  To Asset Issuers APY: ${apyToAssetIssuers.toFixed(2)}%`);
+            if (toAssetIssuersSplit > 0) {
+                console.log(`  To Asset Issuers APY: ${apyToAssetIssuers.toFixed(2)}%`);
+            }
             console.log('='.repeat(80));
             console.log('');
 
@@ -479,6 +487,18 @@
             resultDiv.className = 'calculation-result';
 
             const r = result.calculations;
+            const showAssetIssuers = result.inputs.toAssetIssuersSplit > 0;
+
+            // Build summary with conditional Asset Issuers
+            let summaryHTML = `
+                <strong>Yearly Total:</strong> $${formatNumber(r.yearly.yearlyTotalTradingFee)} |
+                <strong>APY:</strong> ${r.apy.apyTotalTradingFee.toFixed(2)}% |
+                <strong>Curve DAO:</strong> $${formatNumber(r.yearly.yearlyDaoFee)} (${r.apy.apyDaoFee.toFixed(2)}%) |
+                <strong>LP:</strong> $${formatNumber(r.yearly.yearlyToLP)} (${r.apy.apyToLP.toFixed(2)}%)`;
+
+            if (showAssetIssuers) {
+                summaryHTML += ` | <strong>Asset Issuers:</strong> $${formatNumber(r.yearly.yearlyToAssetIssuers)} (${r.apy.apyToAssetIssuers.toFixed(2)}%)`;
+            }
 
             resultDiv.innerHTML = `
                 <div class="result-header" onclick="toggleDetails(this)">
@@ -490,10 +510,7 @@
                 </div>
 
                 <div class="result-summary">
-                    <strong>Yearly Total:</strong> $${formatNumber(r.yearly.yearlyTotalTradingFee)} |
-                    <strong>APY:</strong> ${r.apy.apyTotalTradingFee.toFixed(2)}% |
-                    <strong>Curve DAO:</strong> $${formatNumber(r.yearly.yearlyDaoFee)} (${r.apy.apyDaoFee.toFixed(2)}%) |
-                    <strong>LP:</strong> $${formatNumber(r.yearly.yearlyToLP)} (${r.apy.apyToLP.toFixed(2)}%)
+                    ${summaryHTML}
                 </div>
 
                 <div class="result-details collapsed">
@@ -508,23 +525,23 @@
                     <div class="console-line">  <span class="console-key">Total Trading Fee per Day Rate:</span> <span class="console-value">${result.inputs.totalTradingFeeRate}</span> <span style="color: #b5cea8;">(${(result.inputs.totalTradingFeeRate * 100).toFixed(2)}%)</span></div>
                     <div class="console-line">  <span class="console-key">Curve Dao Fee Split:</span> <span class="console-value">${result.inputs.daoFeeSplit}</span></div>
                     <div class="console-line">  <span class="console-key">Liquidity Provider Fee Split:</span> <span class="console-value">${result.inputs.toLPSplit}</span></div>
-                    <div class="console-line">  <span class="console-key">To Asset Issuers Split:</span> <span class="console-value">${result.inputs.toAssetIssuersSplit}</span></div>
+                    ${showAssetIssuers ? `<div class="console-line">  <span class="console-key">To Asset Issuers Split:</span> <span class="console-value">${result.inputs.toAssetIssuersSplit}</span></div>` : ''}
                     <div class="console-line">  <span class="console-key">Control:</span> <span class="console-value">${result.inputs.control}%</span></div>
                     <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">DAILY CALCULATIONS:</span></div>
                     <div class="console-line">  <span class="console-key">Total Trading Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.totalTradingFeeAmount)}</span></div>
                     <div class="console-line">  <span class="console-key">Curve Dao Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.daoFeeAmount)}</span></div>
                     <div class="console-line">  <span class="console-key">Liquidity Provider Fee:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.toLPAmount)}</span></div>
-                    <div class="console-line">  <span class="console-key">To Asset Issuers:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.toAssetIssuersAmount)}</span></div>
+                    ${showAssetIssuers ? `<div class="console-line">  <span class="console-key">To Asset Issuers:</span> <span style="color: #4ec9b0; font-weight: bold;">$${formatNumber(r.daily.toAssetIssuersAmount)}</span></div>` : ''}
                     <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">YEARLY PROJECTIONS:</span></div>
                     <div class="console-line">  <span class="console-key">Total Trading Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyTotalTradingFee)}</span></div>
                     <div class="console-line">  <span class="console-key">Curve Dao Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyDaoFee)}</span></div>
                     <div class="console-line">  <span class="console-key">Liquidity Provider Fee:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyToLP)}</span></div>
-                    <div class="console-line">  <span class="console-key">To Asset Issuers:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyToAssetIssuers)}</span></div>
+                    ${showAssetIssuers ? `<div class="console-line">  <span class="console-key">To Asset Issuers:</span> <span style="color: #dcdcaa; font-weight: bold;">$${formatNumber(r.yearly.yearlyToAssetIssuers)}</span></div>` : ''}
                     <div class="console-line" style="margin-top: 10px;"><span style="color: #569cd6; font-weight: bold;">APY:</span></div>
                     <div class="console-line">  <span class="console-key">Total Trading Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyTotalTradingFee.toFixed(2)}%</span></div>
                     <div class="console-line">  <span class="console-key">Curve Dao Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyDaoFee.toFixed(2)}%</span></div>
                     <div class="console-line">  <span class="console-key">Liquidity Provider Fee APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyToLP.toFixed(2)}%</span></div>
-                    <div class="console-line">  <span class="console-key">To Asset Issuers APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyToAssetIssuers.toFixed(2)}%</span></div>
+                    ${showAssetIssuers ? `<div class="console-line">  <span class="console-key">To Asset Issuers APY:</span> <span style="color: #4fc1ff; font-weight: bold;">${r.apy.apyToAssetIssuers.toFixed(2)}%</span></div>` : ''}
                     <div class="console-line"><span style="color: #4ec9b0;">================================================================================</span></div>
                 </div>
 
@@ -538,7 +555,7 @@
                             <th>Total Trading Fee</th>
                             <th>Curve Dao Fee</th>
                             <th>LP Fee</th>
-                            <th>Asset Issuers</th>
+                            ${showAssetIssuers ? '<th>Asset Issuers</th>' : ''}
                             <th>Control</th>
                         </tr>
                     </thead>
@@ -551,7 +568,7 @@
                             <td>${result.inputs.totalTradingFeeRate}</td>
                             <td>${result.inputs.daoFeeSplit}</td>
                             <td>${result.inputs.toLPSplit}</td>
-                            <td>${result.inputs.toAssetIssuersSplit}</td>
+                            ${showAssetIssuers ? `<td>${result.inputs.toAssetIssuersSplit}</td>` : ''}
                             <td>${result.inputs.control}%</td>
                         </tr>
                         <tr>
@@ -562,7 +579,7 @@
                             <td class="value-positive">$${formatNumber(r.daily.totalTradingFeeAmount)}</td>
                             <td class="value-positive">$${formatNumber(r.daily.daoFeeAmount)}</td>
                             <td class="value-positive">$${formatNumber(r.daily.toLPAmount)}</td>
-                            <td class="value-positive">$${formatNumber(r.daily.toAssetIssuersAmount)}</td>
+                            ${showAssetIssuers ? `<td class="value-positive">$${formatNumber(r.daily.toAssetIssuersAmount)}</td>` : ''}
                             <td></td>
                         </tr>
                         <tr class="yearly-row">
@@ -573,7 +590,7 @@
                             <td class="value-highlight">$${formatNumber(r.yearly.yearlyTotalTradingFee)}</td>
                             <td class="value-highlight">$${formatNumber(r.yearly.yearlyDaoFee)}</td>
                             <td class="value-highlight">$${formatNumber(r.yearly.yearlyToLP)}</td>
-                            <td class="value-highlight">$${formatNumber(r.yearly.yearlyToAssetIssuers)}</td>
+                            ${showAssetIssuers ? `<td class="value-highlight">$${formatNumber(r.yearly.yearlyToAssetIssuers)}</td>` : ''}
                             <td></td>
                         </tr>
                         <tr class="apy-row">
@@ -584,7 +601,7 @@
                             <td class="value-highlight">${r.apy.apyTotalTradingFee.toFixed(2)}%</td>
                             <td class="value-highlight">${r.apy.apyDaoFee.toFixed(2)}%</td>
                             <td class="value-highlight">${r.apy.apyToLP.toFixed(2)}%</td>
-                            <td class="value-highlight">${r.apy.apyToAssetIssuers.toFixed(2)}%</td>
+                            ${showAssetIssuers ? `<td class="value-highlight">${r.apy.apyToAssetIssuers.toFixed(2)}%</td>` : ''}
                             <td></td>
                         </tr>
                     </tbody>
