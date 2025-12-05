@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMM Fee Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #495057;
+            font-size: 0.9em;
+        }
+
+        input {
+            padding: 10px 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #5a6268;
+        }
+
+        .results-section {
+            margin-top: 30px;
+        }
+
+        .results-log {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .calculation-result {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .result-timestamp {
+            color: #6c757d;
+            font-size: 0.85em;
+        }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .result-table th,
+        .result-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .result-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .yearly-row {
+            background: #e7f3ff !important;
+            font-weight: 600;
+        }
+
+        .apy-row {
+            background: #fff3cd !important;
+            font-weight: 600;
+        }
+
+        .value-positive {
+            color: #28a745;
+        }
+
+        .value-highlight {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .console-log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .console-line {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+
+        .console-key {
+            color: #9cdcfe;
+        }
+
+        .console-value {
+            color: #ce9178;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔷 AMM Fee Calculator</h1>
+        <p class="subtitle">Calculate trading fees and their distribution across DAO, LP, and Asset Issuers</p>
+
+        <div class="form-section">
+            <h2 style="margin-bottom: 20px; color: #333;">Input Parameters</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="usdValue">USD Value ($)</label>
+                    <input type="number" id="usdValue" value="962184.62" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="avgLiquidity">AVG Liquidity Utilisation</label>
+                    <input type="number" id="avgLiquidity" value="0.02" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="tradingVolume">Trading Volume ($)</label>
+                    <input type="number" id="tradingVolume" value="19243.69" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="totalTradingFeeRate">Total Trading Fee (rate)</label>
+                    <input type="number" id="totalTradingFeeRate" value="0.005" step="0.001">
+                </div>
+            </div>
+
+            <h3 style="margin: 20px 0 15px 0; color: #495057;">Fee Distribution Splits</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="daoFeeSplit">DAO FEE (split ratio)</label>
+                    <input type="number" id="daoFeeSplit" value="0.5" step="0.01" min="0" max="1">
+                </div>
+                <div class="form-group">
+                    <label for="toLPSplit">To LP (split ratio)</label>
+                    <input type="number" id="toLPSplit" value="0.5" step="0.01" min="0" max="1">
+                </div>
+                <div class="form-group">
+                    <label for="toAssetIssuersSplit">To Asset Issuers (split ratio)</label>
+                    <input type="number" id="toAssetIssuersSplit" value="0" step="0.01" min="0" max="1">
+                </div>
+                <div class="form-group">
+                    <label for="control">Control (%)</label>
+                    <input type="number" id="control" value="100" step="0.01">
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-calculate" onclick="calculateFees()">Calculate Fees</button>
+                <button class="btn-clear" onclick="clearResults()">Clear History</button>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <h2 style="margin-bottom: 20px; color: #333;">Calculation Results</h2>
+            <div id="resultsLog" class="results-log">
+                <div class="no-results">
+                    No calculations yet. Enter your parameters and click "Calculate Fees" to see results.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let calculationCount = 0;
+
+        function calculateFees() {
+            calculationCount++;
+
+            // Get input values
+            const usdValue = parseFloat(document.getElementById('usdValue').value) || 0;
+            const avgLiquidity = parseFloat(document.getElementById('avgLiquidity').value) || 0;
+            const tradingVolume = parseFloat(document.getElementById('tradingVolume').value) || 0;
+            const totalTradingFeeRate = parseFloat(document.getElementById('totalTradingFeeRate').value) || 0;
+            const daoFeeSplit = parseFloat(document.getElementById('daoFeeSplit').value) || 0;
+            const toLPSplit = parseFloat(document.getElementById('toLPSplit').value) || 0;
+            const toAssetIssuersSplit = parseFloat(document.getElementById('toAssetIssuersSplit').value) || 0;
+            const control = parseFloat(document.getElementById('control').value) || 0;
+
+            // Calculate fee amounts
+            const totalTradingFeeAmount = tradingVolume * totalTradingFeeRate;
+            const daoFeeAmount = totalTradingFeeAmount * daoFeeSplit;
+            const toLPAmount = totalTradingFeeAmount * toLPSplit;
+            const toAssetIssuersAmount = totalTradingFeeAmount * toAssetIssuersSplit;
+
+            // Calculate yearly projections (assuming daily trading, 365 days)
+            const yearlyTotalTradingFee = totalTradingFeeAmount * 365;
+            const yearlyDaoFee = daoFeeAmount * 365;
+            const yearlyToLP = toLPAmount * 365;
+            const yearlyToAssetIssuers = toAssetIssuersAmount * 365;
+
+            // Calculate APY (Annual Percentage Yield)
+            const apyTotalTradingFee = usdValue > 0 ? (yearlyTotalTradingFee / usdValue) * 100 : 0;
+            const apyDaoFee = usdValue > 0 ? (yearlyDaoFee / usdValue) * 100 : 0;
+            const apyToLP = usdValue > 0 ? (yearlyToLP / usdValue) * 100 : 0;
+            const apyToAssetIssuers = usdValue > 0 ? (yearlyToAssetIssuers / usdValue) * 100 : 0;
+
+            // Create result object
+            const result = {
+                timestamp: new Date().toLocaleString(),
+                inputs: {
+                    usdValue,
+                    avgLiquidity,
+                    tradingVolume,
+                    totalTradingFeeRate,
+                    daoFeeSplit,
+                    toLPSplit,
+                    toAssetIssuersSplit,
+                    control
+                },
+                calculations: {
+                    daily: {
+                        totalTradingFeeAmount,
+                        daoFeeAmount,
+                        toLPAmount,
+                        toAssetIssuersAmount
+                    },
+                    yearly: {
+                        yearlyTotalTradingFee,
+                        yearlyDaoFee,
+                        yearlyToLP,
+                        yearlyToAssetIssuers
+                    },
+                    apy: {
+                        apyTotalTradingFee,
+                        apyDaoFee,
+                        apyToLP,
+                        apyToAssetIssuers
+                    }
+                }
+            };
+
+            // Log to console
+            console.log('='.repeat(80));
+            console.log(`CALCULATION #${calculationCount} - ${result.timestamp}`);
+            console.log('='.repeat(80));
+            console.log('INPUTS:');
+            console.log(`  USD Value: $${formatNumber(usdValue)}`);
+            console.log(`  AVG Liquidity Utilisation: ${avgLiquidity}`);
+            console.log(`  Trading Volume: $${formatNumber(tradingVolume)}`);
+            console.log(`  Total Trading Fee Rate: ${totalTradingFeeRate} (${(totalTradingFeeRate * 100).toFixed(2)}%)`);
+            console.log(`  DAO Fee Split: ${daoFeeSplit}`);
+            console.log(`  To LP Split: ${toLPSplit}`);
+            console.log(`  To Asset Issuers Split: ${toAssetIssuersSplit}`);
+            console.log(`  Control: ${control}%`);
+            console.log('');
+            console.log('DAILY CALCULATIONS:');
+            console.log(`  Total Trading Fee: $${formatNumber(totalTradingFeeAmount)}`);
+            console.log(`  DAO Fee: $${formatNumber(daoFeeAmount)}`);
+            console.log(`  To LP: $${formatNumber(toLPAmount)}`);
+            console.log(`  To Asset Issuers: $${formatNumber(toAssetIssuersAmount)}`);
+            console.log('');
+            console.log('YEARLY PROJECTIONS:');
+            console.log(`  Total Trading Fee: $${formatNumber(yearlyTotalTradingFee)}`);
+            console.log(`  DAO Fee: $${formatNumber(yearlyDaoFee)}`);
+            console.log(`  To LP: $${formatNumber(yearlyToLP)}`);
+            console.log(`  To Asset Issuers: $${formatNumber(yearlyToAssetIssuers)}`);
+            console.log('');
+            console.log('APY:');
+            console.log(`  Total Trading Fee APY: ${apyTotalTradingFee.toFixed(2)}%`);
+            console.log(`  DAO Fee APY: ${apyDaoFee.toFixed(2)}%`);
+            console.log(`  To LP APY: ${apyToLP.toFixed(2)}%`);
+            console.log(`  To Asset Issuers APY: ${apyToAssetIssuers.toFixed(2)}%`);
+            console.log('='.repeat(80));
+            console.log('');
+
+            // Display result in UI
+            displayResult(result, calculationCount);
+        }
+
+        function displayResult(result, count) {
+            const resultsLog = document.getElementById('resultsLog');
+
+            // Remove "no results" message if it exists
+            if (resultsLog.querySelector('.no-results')) {
+                resultsLog.innerHTML = '';
+            }
+
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'calculation-result';
+
+            const r = result.calculations;
+
+            resultDiv.innerHTML = `
+                <div class="result-header">
+                    <div class="result-title">Calculation #${count}</div>
+                    <div class="result-timestamp">${result.timestamp}</div>
+                </div>
+
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th>WETH/INV</th>
+                            <th>USD Value</th>
+                            <th>AVG Liquidity Utilisation</th>
+                            <th>Trading Volume</th>
+                            <th>Total Trading Fee</th>
+                            <th>DAO FEE</th>
+                            <th>To LP</th>
+                            <th>To Asset Issuers</th>
+                            <th>Control</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>$${formatNumber(result.inputs.usdValue)}</td>
+                            <td>${result.inputs.avgLiquidity}</td>
+                            <td>$${formatNumber(result.inputs.tradingVolume)}</td>
+                            <td>${result.inputs.totalTradingFeeRate}</td>
+                            <td>${result.inputs.daoFeeSplit}</td>
+                            <td>${result.inputs.toLPSplit}</td>
+                            <td>${result.inputs.toAssetIssuersSplit}</td>
+                            <td>${result.inputs.control}%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Daily</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="value-positive">$${formatNumber(r.daily.totalTradingFeeAmount)}</td>
+                            <td class="value-positive">$${formatNumber(r.daily.daoFeeAmount)}</td>
+                            <td class="value-positive">$${formatNumber(r.daily.toLPAmount)}</td>
+                            <td class="value-positive">$${formatNumber(r.daily.toAssetIssuersAmount)}</td>
+                            <td></td>
+                        </tr>
+                        <tr class="yearly-row">
+                            <td><strong>Yearly</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="value-highlight">$${formatNumber(r.yearly.yearlyTotalTradingFee)}</td>
+                            <td class="value-highlight">$${formatNumber(r.yearly.yearlyDaoFee)}</td>
+                            <td class="value-highlight">$${formatNumber(r.yearly.yearlyToLP)}</td>
+                            <td class="value-highlight">$${formatNumber(r.yearly.yearlyToAssetIssuers)}</td>
+                            <td></td>
+                        </tr>
+                        <tr class="apy-row">
+                            <td><strong>APY</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="value-highlight">${r.apy.apyTotalTradingFee.toFixed(2)}%</td>
+                            <td class="value-highlight">${r.apy.apyDaoFee.toFixed(2)}%</td>
+                            <td class="value-highlight">${r.apy.apyToLP.toFixed(2)}%</td>
+                            <td class="value-highlight">${r.apy.apyToAssetIssuers.toFixed(2)}%</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+
+            // Insert at the top (newest first)
+            resultsLog.insertBefore(resultDiv, resultsLog.firstChild);
+        }
+
+        function formatNumber(num) {
+            return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function clearResults() {
+            const resultsLog = document.getElementById('resultsLog');
+            resultsLog.innerHTML = `
+                <div class="no-results">
+                    No calculations yet. Enter your parameters and click "Calculate Fees" to see results.
+                </div>
+            `;
+            calculationCount = 0;
+            console.clear();
+            console.log('Calculator history cleared.');
+        }
+
+        // Initial calculation on page load
+        window.addEventListener('load', () => {
+            console.log('AMM Fee Calculator loaded.');
+            console.log('Ready to calculate fees!');
+        });
+    </script>
+</body>
+</html>
