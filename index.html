@@ -378,7 +378,8 @@
         function updateFeePercentage() {
             const bips = parseFloat(document.getElementById('totalTradingFeeRate').value) || 0;
             const percentage = (bips / 100).toFixed(2);
-            document.getElementById('feePercentageDisplay').textContent = `${percentage}%`;
+            const ratio = (bips / 10000).toFixed(4);
+            document.getElementById('feePercentageDisplay').textContent = `${percentage}% (${ratio} ratio)`;
         }
 
         // Calculate control percentage automatically
