@@ -21,35 +21,34 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             padding: 30px;
         }
 
         h1 {
-            color: #00d4ff;
+            color: #333;
             margin-bottom: 10px;
             font-size: 2em;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
         }
 
         .subtitle {
-            color: #8ab4f8;
+            color: #666;
             margin-bottom: 30px;
             font-size: 0.95em;
         }
 
         h2, h3 {
-            color: #00d4ff;
+            color: #495057;
         }
 
         .form-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: #f8f9fa;
             padding: 25px;
             border-radius: 8px;
             margin-bottom: 30px;
-            border: 2px solid rgba(0, 153, 255, 0.3);
+            border: 2px solid #e9ecef;
         }
 
         .form-grid {
@@ -67,25 +66,25 @@
         label {
             font-weight: 600;
             margin-bottom: 8px;
-            color: #00d4ff;
+            color: #495057;
             font-size: 0.9em;
         }
 
         input {
             padding: 10px 12px;
-            border: 2px solid rgba(0, 153, 255, 0.3);
+            border: 2px solid #dee2e6;
             border-radius: 6px;
             font-size: 1em;
             transition: all 0.3s;
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
+            background: white;
+            color: #333;
         }
 
         input:focus {
             outline: none;
             border-color: #0099ff;
-            box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.2);
-            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.1);
+            background: white;
         }
 
         .button-group {
@@ -119,14 +118,13 @@
         }
 
         .btn-clear {
-            background: rgba(255, 255, 255, 0.1);
-            color: #00d4ff;
-            border: 2px solid rgba(0, 153, 255, 0.3);
+            background: #6c757d;
+            color: white;
+            border: none;
         }
 
         .btn-clear:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #0099ff;
+            background: #5a6268;
         }
 
         .results-section {
@@ -139,8 +137,8 @@
         }
 
         .calculation-result {
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(0, 153, 255, 0.2);
+            background: white;
+            border: 2px solid #e9ecef;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
@@ -164,22 +162,22 @@
             align-items: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid rgba(0, 153, 255, 0.2);
+            border-bottom: 2px solid #e9ecef;
             cursor: pointer;
         }
 
         .result-header:hover {
-            border-bottom-color: rgba(0, 153, 255, 0.4);
+            border-bottom-color: #0099ff;
         }
 
         .result-title {
             font-weight: 600;
-            color: #00d4ff;
+            color: #0099ff;
             font-size: 1.1em;
         }
 
         .result-timestamp {
-            color: #8ab4f8;
+            color: #6c757d;
             font-size: 0.85em;
         }
 
@@ -195,7 +193,7 @@
         }
 
         .result-summary {
-            color: #8ab4f8;
+            color: #495057;
             font-size: 0.95em;
             margin-top: 10px;
         }
@@ -219,46 +217,46 @@
         .result-table td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid rgba(0, 153, 255, 0.1);
-            color: #ffffff;
+            border-bottom: 1px solid #e9ecef;
+            color: #333;
         }
 
         .result-table th {
-            background: rgba(0, 153, 255, 0.15);
+            background: #f8f9fa;
             font-weight: 600;
-            color: #00d4ff;
+            color: #495057;
             font-size: 0.9em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .result-table tr:hover {
-            background: rgba(0, 153, 255, 0.05);
+            background: #f8f9fa;
         }
 
         .yearly-row {
-            background: rgba(0, 153, 255, 0.15) !important;
+            background: #e7f3ff !important;
             font-weight: 600;
         }
 
         .apy-row {
-            background: rgba(0, 212, 255, 0.15) !important;
+            background: #fff3cd !important;
             font-weight: 600;
         }
 
         .value-positive {
-            color: #00ff88;
+            color: #28a745;
         }
 
         .value-highlight {
             font-weight: 600;
-            color: #00d4ff;
+            color: #0099ff;
         }
 
         .no-results {
             text-align: center;
             padding: 40px;
-            color: #8ab4f8;
+            color: #6c757d;
         }
 
         .console-log {
@@ -292,7 +290,7 @@
         <p class="subtitle">Calculate trading fees and their distribution across DAO, LP, and Asset Issuers</p>
 
         <div class="form-section">
-            <h2 style="margin-bottom: 20px; color: #333;">Input Parameters</h2>
+            <h2 style="margin-bottom: 20px;">Input Parameters</h2>
             <div class="form-grid">
                 <div class="form-group">
                     <label for="usdValue">Value of the Pool ($)</label>
@@ -312,7 +310,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 20px 0 15px 0; color: #495057;">Fee Distribution Splits</h3>
+            <h3 style="margin: 20px 0 15px 0;">Fee Distribution Splits</h3>
             <div class="form-grid">
                 <div class="form-group">
                     <label for="daoFeeSplit">Curve Dao Fee (split ratio)</label>
@@ -339,7 +337,7 @@
         </div>
 
         <div class="results-section">
-            <h2 style="margin-bottom: 20px; color: #333;">Calculation Results</h2>
+            <h2 style="margin-bottom: 20px;">Calculation Results</h2>
             <div id="resultsLog" class="results-log">
                 <div class="no-results">
                     No calculations yet. Enter your parameters and click "Calculate Fees" to see results.
